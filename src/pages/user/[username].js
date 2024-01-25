@@ -24,7 +24,7 @@ const UserDetails = ({ user, repos }) => {
             <div className='max-w-[1180px] sm:w-full flex flex-col justify-start items-start p-3 mx-auto'>
                 <div className='flex mr-2 text-2xl dark:font-medium font-semibold dark:text-[#44ed9c] text-[#fd4c74] text-uppercase w-auto text-left underlined'>{user?.login}</div>
                 <div className='md:mt-4 sm:mt-6 w-full flex md:flex-row sm:flex-col item-center'>
-                    <div className='md:w-[30%] border-r-2 border-white sm:w-full flex flex-col p-2'>
+                    <div className='md:w-[30%] md:border-r-2 md:border-white sm:w-full flex flex-col p-2'>
                     <div className="w-full px-3 py-3 text-center rounded-lg lg:mt-0 ">
                         <div className="space-y-4 xl:space-y-6">
                             <img className="mx-auto rounded-full h-44 w-44" src={user.avatar_url} alt={`${user.login}'s avatar`} />
