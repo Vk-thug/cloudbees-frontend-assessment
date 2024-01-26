@@ -6,7 +6,7 @@ const BASE_URL = 'https://api.github.com';
 export const getUsers = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/users`);
-    return response
+    return response.data
   } catch (error) {
     console.error('Error fetching users:', error);
     throw error;
