@@ -1,29 +1,37 @@
 // pages/index.js
-import React, { useState } from "react"
+
+import React, { useState, useRef } from "react"
 import { getUsers } from './services/github';
 import ProfileCard from '@/components/ProfileCard/ProfileCard';
 import Paginate from '@/components/Paginate/Paginate';
+import Error from "./_error";
 
 const UserList = ({ initialUserData }) => {
   const [initalUsers, setInitialUsers] = useState(initialUserData); 
   const [searchVal, setSearchVal] = useState(""); 
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemPerPage,setItemPerPage] = useState(5)
+
+
   const indexOfLastUser = currentPage * itemPerPage;
   const indexOfFirstUser = indexOfLastUser - itemPerPage;
   const currentUsers = initialUserData.slice(indexOfFirstUser, indexOfLastUser);
   const [usersData, setUserData] = useState(currentUsers); 
+  const ref = useRef(null);
 
   const paginate = async (pageNumber) => {
      setCurrentPage(pageNumber);
      const currentUsers = initialUserData.slice((pageNumber * itemPerPage) - itemPerPage, pageNumber * itemPerPage);
      setUserData(prev=> currentUsers);
+     ref.current?.scrollIntoView({behavior: 'smooth'});
   }
   const previousPage = async () => {
     if (currentPage !== 1) {
       const currentUsers = initialUserData.slice(((currentPage - 1) * itemPerPage) - itemPerPage, (currentPage - 1) * itemPerPage);
       setCurrentPage(currentPage - 1);
       setUserData(prev=> currentUsers);
+      ref.current?.scrollIntoView({behavior: 'smooth'});
     }
   };
 
@@ -32,6 +40,7 @@ const UserList = ({ initialUserData }) => {
       const currentUsers = initialUserData.slice(((currentPage + 1) * itemPerPage) - itemPerPage, (currentPage + 1) * itemPerPage);
       setCurrentPage(currentPage + 1);
       setUserData(prev=> currentUsers);
+      ref.current?.scrollIntoView({behavior: 'smooth'});
     }
   }
 
@@ -60,8 +69,8 @@ const UserList = ({ initialUserData }) => {
     <div id="work" className='w-full h-auto md:p-6 sm:p-0 md:mt-6 sm:mt-0 flex justify-center items-center'>
             <div className='max-w-[1180px] lg:w-[90%] sm:w-full flex flex-col justify-center items-center p-3 mx-auto'>
                 <div className='w-full h-auto md:p-4 sm:p-3 flex lg:flex-row sm:flex-col-reverse justify-center lg:items-start md:items-center lg:mt-6 sm:mt-3'>
-                    <div className='w-full h-auto flex flex-col justify-center items-center md:p-3 sm:p-0'>
-                        <div href="#contact" className='mb-6 text text-[32px] text-[#495670] dark:text-[#ccd6f6] font-semibold flex justify-start items-start'>
+                    <div ref={ref} className='w-full h-auto flex flex-col justify-center items-center md:p-3 sm:p-0'>
+                        <div className='mb-6 text text-[32px] text-[#495670] dark:text-[#ccd6f6] font-semibold flex justify-start items-start'>
                             <span className='mono-font text-[24px] font-normal dark:text-[#44ed9c] text-[#fd4c74] mr-2'>01.</span>
                             <div className="flex justify-center items-center">Github User List for you to manage with pagination</div>
                         </div>
@@ -92,9 +101,15 @@ const UserList = ({ initialUserData }) => {
   );
 };
 
-export const getStaticProps = async () => {
-  const initialUserData = await getUsers();
-  return { props: { initialUserData } };
+export const getServerSideProps = async () => {
+  const response = await getUsers();
+  if (!response.ok) {
+    return {
+      notFound: true,
+    }
+  }
+  const user = response.ok ? response.data : []
+  return { props: { user } };
 };
 
 export default UserList;
