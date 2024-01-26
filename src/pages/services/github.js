@@ -5,8 +5,8 @@ const BASE_URL = 'https://api.github.com';
 
 export const getUsers = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/users?per_page=20&page=1`);
-    return response.data;
+    const response = await axios.get(`${BASE_URL}/users`);
+    return response
   } catch (error) {
     console.error('Error fetching users:', error);
     throw error;
@@ -15,7 +15,7 @@ export const getUsers = async () => {
 export const getUsersByLimit = async (page, item) => {
     try {
       const response = await axios.get(`${BASE_URL}/users?per_page=${item}&page=${page}`);
-      return response.data;
+      return response.data
     } catch (error) {
       console.error('Error fetching users:', error);
       throw error;
@@ -24,7 +24,7 @@ export const getUsersByLimit = async (page, item) => {
 export const getUserDetails = async (username) => {
   try {
     const response = await axios.get(`${BASE_URL}/users/${username}`);
-    return response.data;
+    return response.data
   } catch (error) {
     console.error(`Error fetching user details for ${username}:`, error);
     throw error;
