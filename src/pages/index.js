@@ -102,14 +102,8 @@ const UserList = ({ initialUserData }) => {
 };
 
 export const getServerSideProps = async () => {
-  const response = await getUsers();
-  if (!response.ok) {
-    return {
-      notFound: true,
-    }
-  }
-  const user = response.ok ? response.data : []
-  return { props: { user } };
+  const initialUserData = await getUsers();
+  return { props: { initialUserData } };
 };
 
 export default UserList;
