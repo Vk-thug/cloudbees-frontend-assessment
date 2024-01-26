@@ -72,17 +72,23 @@ const UserDetails = ({ user, repos }) => {
   );
 };
 
-export const getStaticPaths = async () => {
-  // Pre-render pages for each user
-  const users = await getUsers();
-  const paths = users.map((user) => ({ params: { username: user.login } }));
-  return { paths, fallback: true };
-};
+// export const getStaticPaths = async () => {
+//   // Pre-render pages for each user
+//   const users = await getUsers();
+//   const paths = users.map((user) => ({ params: { username: user.login } }));
+//   return { paths, fallback: true };
+// };
 
-export const getStaticProps = async ({ params }) => {
-  const user = await getUserDetails(params.username);
-  const repos = await getRepoDetails(params.username);
-  return { props: { user, repos }, revalidate: 1 };
+// export const getStaticProps = async ({ params }) => {
+//   const user = await getUserDetails(params.username);
+//   const repos = await getRepoDetails(params.username);
+//   return { props: { user, repos }, revalidate: 1 };
+// };
+
+export const getServerSideProps = async ({ params }) => {
+    const user = await getUserDetails(params.username);
+    const repos = await getRepoDetails(params.username);
+    return { props: { user,  repos} };
 };
 
 export default UserDetails;
